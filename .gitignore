@@ -12,4 +12,20 @@
 *.out
 
 # Dependency directories (remove the comment below to include it)
-# vendor/
+/vendor/
+
+# Log
+*.log
+
+# VSCode settings
+.vscode
+
+# IDEA files
+.idea
+
+# OSX dir files
+.DS_Store
+
+# Sublime Text settings
+*.sublime-workspace
+*.sublime-project
