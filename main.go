@@ -1,6 +1,5 @@
 package gshop
 
-func main()  {
+func main() {
 	// DSN
-	DSN := ""
 }
