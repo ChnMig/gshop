@@ -6,10 +6,10 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-// Log zapLog对象
+// Log zapLog
 var Log *zap.Logger
 
-// 日志切割设置
+// Log cutting settings
 func getLogWriter() zapcore.WriteSyncer {
 	lumberJackLogger := &lumberjack.Logger{
 		Filename:   "api.log", // 日志文件位置
@@ -21,16 +21,16 @@ func getLogWriter() zapcore.WriteSyncer {
 	return zapcore.AddSync(lumberJackLogger)
 }
 
-// 编码器
+// log encoder
 func getEncoder() zapcore.Encoder {
-	// 使用默认的JSON编码
+	// Use the default JSON encoding
 	encoderConfig := zap.NewProductionEncoderConfig()
 	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
 	return zapcore.NewJSONEncoder(encoderConfig)
 }
 
-// InitLogger 初始化Logger
+// InitLogger init log
 func InitLogger() {
 	writeSyncer := getLogWriter()
 	encoder := getEncoder()

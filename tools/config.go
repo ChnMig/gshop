@@ -18,8 +18,8 @@ type Config struct {
 		HOST  string
 		Debug int
 	}
-	// MYSQL
-	MySQL struct {
+	// DB
+	DB struct {
 		Address string
 	}
 	// Redis
@@ -64,12 +64,12 @@ func InitConfig() {
 		return 1
 	}()
 
-	EnvConfig.MySQL.Address = func() string {
-		a := os.Getenv("GSHOP_MYSQL_ADDRESS")
+	EnvConfig.DB.Address = func() string {
+		a := os.Getenv("GSHOP_DB_ADDRESS")
 		if a != "" {
 			return a
 		}
-		Log.Panic("GSHOP_MYSQL_ADDRESS is not read!")
+		Log.Panic("GSHOP_DB_ADDRESS is not read!")
 		return ""
 	}()
 
