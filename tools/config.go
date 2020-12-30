@@ -54,11 +54,12 @@ func InitConfig() {
 	EnvConfig.Gshop.Debug = func() int {
 		ed := os.Getenv("GSHOP_DEBUG")
 		if ed != "" {
-			if d, err := strconv.Atoi(ed); err != nil {
-				return d
+			d, err := strconv.Atoi(ed)
+			if err != nil {
+				Log.Warn("GSHOP_DEBUG cannot be parsed, replaced with the default 1")
+				return 1
 			}
-			Log.Warn("GSHOP_DEBUG cannot be parsed, replaced with the default 1")
-			return 1
+			return d
 		}
 		Log.Warn("GSHOP_DEBUG is not read, replaced with the default 1")
 		return 1
