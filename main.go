@@ -1,4 +1,4 @@
-package gshop
+package main
 
 import (
 	"io"
