@@ -12,11 +12,11 @@ var Log *zap.Logger
 // Log cutting settings
 func getLogWriter() zapcore.WriteSyncer {
 	lumberJackLogger := &lumberjack.Logger{
-		Filename:   "api.log", // 日志文件位置
-		MaxSize:    10,        // 日志文件最大大小(MB)
-		MaxBackups: 5,         // 保留旧文件最大数量
-		MaxAge:     30,        // 保留旧文件最长天数
-		Compress:   false,     // 是否压缩旧文件
+		Filename:   "api.log", // Log file location
+		MaxSize:    10,        // Maximum log file size(MB)
+		MaxBackups: 5,         // Keep the maximum number of old files
+		MaxAge:     30,        // Maximum number of days to keep old files
+		Compress:   false,     // Whether to compress old files
 	}
 	return zapcore.AddSync(lumberJackLogger)
 }
