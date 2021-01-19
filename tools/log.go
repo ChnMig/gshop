@@ -1,6 +1,15 @@
 package tools
 
 import (
+	"net"
+	"net/http"
+	"net/http/httputil"
+	"os"
+	"runtime/debug"
+	"strings"
+	"time"
+
+	"github.com/gin-gonic/gin"
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -9,16 +18,19 @@ import (
 // Log zapLog
 var Log *zap.Logger
 
+// LumberJackLogger log io
+var LumberJackLogger *lumberjack.Logger
+
 // Log cutting settings
 func getLogWriter() zapcore.WriteSyncer {
-	lumberJackLogger := &lumberjack.Logger{
+	LumberJackLogger = &lumberjack.Logger{
 		Filename:   "api.log", // Log file location
 		MaxSize:    10,        // Maximum log file size(MB)
 		MaxBackups: 5,         // Keep the maximum number of old files
 		MaxAge:     30,        // Maximum number of days to keep old files
 		Compress:   false,     // Whether to compress old files
 	}
-	return zapcore.AddSync(lumberJackLogger)
+	return zapcore.AddSync(LumberJackLogger)
 }
 
 // log encoder
@@ -35,6 +47,74 @@ func InitLogger() {
 	writeSyncer := getLogWriter()
 	encoder := getEncoder()
 	core := zapcore.NewCore(encoder, writeSyncer, zapcore.DebugLevel)
-
 	Log = zap.New(core, zap.AddCaller())
+}
+
+// GinLogger Receive the default log of the gin framework
+func GinLogger() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		start := time.Now()
+		path := c.Request.URL.Path
+		query := c.Request.URL.RawQuery
+		c.Next()
+
+		cost := time.Since(start)
+		Log.Info("[GIN]",
+			zap.Int("status", c.Writer.Status()),
+			zap.String("method", c.Request.Method),
+			zap.String("path", path),
+			zap.String("query", query),
+			zap.String("ip", c.ClientIP()),
+			zap.String("user-agent", c.Request.UserAgent()),
+			zap.String("errors", c.Errors.ByType(gin.ErrorTypePrivate).String()),
+			zap.Duration("cost", cost),
+		)
+	}
+}
+
+// GinRecovery Recover the panic that may appear in the project, and use zap to record related logs
+func GinRecovery(stack bool) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		defer func() {
+			if err := recover(); err != nil {
+				// Check for a broken connection, as it is not really a
+				// condition that warrants a panic stack trace.
+				var brokenPipe bool
+				if ne, ok := err.(*net.OpError); ok {
+					if se, ok := ne.Err.(*os.SyscallError); ok {
+						if strings.Contains(strings.ToLower(se.Error()), "broken pipe") || strings.Contains(strings.ToLower(se.Error()), "connection reset by peer") {
+							brokenPipe = true
+						}
+					}
+				}
+
+				httpRequest, _ := httputil.DumpRequest(c.Request, false)
+				if brokenPipe {
+					Log.Error(c.Request.URL.Path,
+						zap.Any("error", err),
+						zap.String("request", string(httpRequest)),
+					)
+					// If the connection is dead, we can't write a status to it.
+					c.Error(err.(error)) // nolint: errcheck
+					c.Abort()
+					return
+				}
+
+				if stack {
+					Log.Error("[Recovery from panic]",
+						zap.Any("error", err),
+						zap.String("request", string(httpRequest)),
+						zap.String("stack", string(debug.Stack())),
+					)
+				} else {
+					Log.Error("[Recovery from panic]",
+						zap.Any("error", err),
+						zap.String("request", string(httpRequest)),
+					)
+				}
+				c.AbortWithStatus(http.StatusInternalServerError)
+			}
+		}()
+		c.Next()
+	}
 }

@@ -1,9 +1,6 @@
 package main
 
 import (
-	"io"
-	"os"
-
 	"github.com/chnmig/gshop/app"
 	"github.com/chnmig/gshop/db"
 	"github.com/chnmig/gshop/tools"
@@ -34,9 +31,6 @@ func main() {
 		// close gin debug
 		gin.SetMode(gin.ReleaseMode)
 		gin.DisableConsoleColor()
-		// gin log to file
-		ginFile, _ := os.OpenFile("./gin.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-		gin.DefaultWriter = io.MultiWriter(ginFile)
 	}
 	// run gin
 	r := app.InitApp()
