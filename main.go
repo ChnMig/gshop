@@ -8,6 +8,15 @@ import (
 	"go.uber.org/zap"
 )
 
+// @title Gshop API
+// @description Gshop is an API for shopping websites
+// @BasePath /api
+// @contact.name ChnMig
+// @contact.email ChnMig@Outlook.com
+// @version 0.1
+// @license.name Apache 2.0
+// @license.url https://github.com/ChnMig/gshop/blob/main/LICENSE
+
 func main() {
 	// init gshop log
 	tools.InitLogger()

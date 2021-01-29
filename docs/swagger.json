@@ -1,0 +1,18 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Gshop is an API for shopping websites",
+        "title": "Gshop API",
+        "contact": {
+            "name": "ChnMig",
+            "email": "ChnMig@Outlook.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "https://github.com/ChnMig/gshop/blob/main/LICENSE"
+        },
+        "version": "0.1"
+    },
+    "basePath": "/api",
+    "paths": {}
+}
