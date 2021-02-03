@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/chnmig/gshop/app"
-	"github.com/chnmig/gshop/db"
-	"github.com/chnmig/gshop/tools"
+	"gshop/app"
+	"gshop/db"
+	"gshop/tools"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

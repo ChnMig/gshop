@@ -3,7 +3,8 @@ package app
 // 总路由
 
 import (
-	"github.com/chnmig/gshop/middleware"
+	"gshop/middleware"
+
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"

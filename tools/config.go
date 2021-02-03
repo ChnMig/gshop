@@ -26,6 +26,11 @@ type Config struct {
 	Redis struct {
 		Address string
 	}
+	// JWT
+	JWT struct {
+		Key        string
+		Expiration int
+	}
 }
 
 // DoEnv Read the configuration from the specified file to the environment variable, the default is .env under gshop
@@ -82,4 +87,28 @@ func InitConfig() {
 		Log.Panic("GSHOP_REDIS_ADDRESS is not read!")
 		return ""
 	}()
+
+	EnvConfig.JWT.Key = func() string {
+		k := os.Getenv("JWT_KEY")
+		if k != "" {
+			return k
+		}
+		Log.Panic("JWT_KEY is not read!")
+		return ""
+	}()
+
+	EnvConfig.JWT.Expiration = func() int {
+		e := os.Getenv("JWT_Expiration")
+		if e != "" {
+			d, err := strconv.Atoi(e)
+			if err != nil {
+				Log.Warn("JWT_Expiration cannot be parsed, replaced with the default 604800")
+				return 604800
+			}
+			return d
+		}
+		Log.Warn("JWT_Expiration cannot be parsed, replaced with the default 604800")
+		return 604800
+	}()
+
 }

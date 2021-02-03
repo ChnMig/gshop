@@ -1,7 +1,8 @@
 package db
 
 import (
-	"github.com/chnmig/gshop/tools"
+	"gshop/tools"
+
 	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
 )
