@@ -1,8 +1,8 @@
 package app
 
 import (
+	"gshop/app/user"
 	"gshop/db"
-	"os/user"
 )
 
 // MigrateAll Migrate all table structures to mysql database

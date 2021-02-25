@@ -10,3 +10,10 @@ If mysql is not available, maybe you can use Docker to extract the mysql image
 ## Connect to redis database
 If redis is not available, maybe you can use Docker to extract the redis image
 `docker run -d --name redis -p 6379:6379 redis --requirepass "rdb_exmaple"`
+
+## Migrate
+Synchronize database structure to database
+`gshop -operation migrate`
+
+## Start
+`gshop -operation start`

@@ -1,7 +1,7 @@
 package db
 
 import (
-	"gshop/tools"
+	"gshop/tool"
 
 	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"

@@ -2,8 +2,8 @@ package user
 
 import "gorm.io/gorm"
 
-type nameLoginParam struct {
-	Name     string `json:"name" from:"name" binding:"required" max:"10" min:"4"`
+type nickNameLoginParam struct {
+	NickName string `json:"nick_name" from:"nick_name" binding:"required" max:"10" min:"4"`
 	PassWord string `json:"pass_word" from:"pass_word" binding:"required" max:"20" min:"6"`
 }
 

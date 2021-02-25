@@ -1,9 +1,11 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"gshop/app"
 	"gshop/db"
-	"gshop/tools"
+	tools "gshop/tool"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -19,6 +21,24 @@ import (
 // @license.url https://github.com/ChnMig/gshop/blob/main/LICENSE
 
 func main() {
+	op := flag.String("operation", "start", `This determines the operation of the program
+	start: Start project, is default
+	migrate: Synchronize database structure to database
+	init: Add basic data to database
+	`)
+	switch *op {
+	case "start":
+		start()
+	case "migrate":
+		migrate()
+	default:
+		fmt.Println("Unexpected operation")
+	}
+}
+
+// start project
+func start() {
+	flag.Parsed()
 	// init gshop log
 	tools.InitLogger()
 	// Clear the buffer before the end of the program
@@ -49,4 +69,16 @@ func main() {
 		tools.Log.Panic("start gin error", zap.Error(err))
 	}
 	tools.Log.Info("successfully started Gin")
+}
+
+func migrate() {
+	// init config
+	tools.InitConfig()
+	tools.Log.Info("successfully get env")
+	// init grom
+	_ = db.ConnDB(tools.EnvConfig.DB.Address)
+	tools.Log.Info("successfully init gorm")
+	// migrate
+	app.MigrateAll()
+	fmt.Println("successfully")
 }

@@ -1,7 +1,7 @@
 package db
 
 import (
-	"gshop/tools"
+	"gshop/tool"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
