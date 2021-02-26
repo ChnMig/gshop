@@ -34,7 +34,6 @@ func CorsHandler() gin.HandlerFunc {
 			c.Header("Access-Control-Allow-Credentials", "false")
 			c.Set("content-type", "application/json")
 		}
-
 		// Release all OPTIONS methods
 		if method == "OPTIONS" {
 			c.JSON(http.StatusOK, "Options Request!")

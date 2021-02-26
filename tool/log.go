@@ -1,4 +1,4 @@
-package tools
+package tool
 
 import (
 	"net"
@@ -87,7 +87,6 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 						}
 					}
 				}
-
 				httpRequest, _ := httputil.DumpRequest(c.Request, false)
 				if brokenPipe {
 					Log.Error(c.Request.URL.Path,
@@ -99,7 +98,6 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 					c.Abort()
 					return
 				}
-
 				if stack {
 					Log.Error("[Recovery from panic]",
 						zap.Any("error", err),

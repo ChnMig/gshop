@@ -1,4 +1,4 @@
-package tools
+package tool
 
 import (
 	"time"
@@ -44,16 +44,16 @@ func JWTIssue(jwtID string) (string, error) {
 }
 
 // JWTDecrypt string token to data
-func JWTDecrypt(tokenString string) (tokenID *string, err error) {
+func JWTDecrypt(tokenString string) (tokenID string, err error) {
 	token, err := jwt.ParseWithClaims(tokenString, &myCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(EnvConfig.JWT.Key), nil
 	})
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	if claims, ok := token.Claims.(*myCustomClaims); ok && token.Valid {
 		// success
-		return &claims.Id, nil
+		return claims.Id, nil
 	}
-	return nil, err
+	return "", err
 }
