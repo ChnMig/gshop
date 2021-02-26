@@ -27,7 +27,7 @@ func nickNameLoginHandler(c *gin.Context) {
 		tools.Log.Warn(ei, zap.Error(err))
 		return
 	}
-	u, err := useNickNamegetUserFromDB(params.NickName)
+	u, err := useNickNameGetUserFromDB(params.NickName)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			ei := "This user was not found"

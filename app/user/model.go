@@ -15,5 +15,5 @@ type nameLoginResponse struct {
 type User struct {
 	gorm.Model
 	NickName string `gorm:"size:10"`
-	PassWord string `gorm:"size:20"`
+	PassWord string `gorm:"size:100"`
 }
